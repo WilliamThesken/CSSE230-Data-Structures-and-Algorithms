@@ -1,0 +1,470 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
+
+/**
+ * 
+ * Implementation of most of the Set interface operations using a Binary Search Tree
+ *
+ * @author Matt Boutell and <<< William Thesken >>>.
+ * @param <T>
+ */
+
+public class BinarySearchTree<T extends Comparable<T>> implements Iterable<T>{
+	private BinaryNode root;
+
+	// Most of you will prefer to use NULL NODES once you see how to use them.
+	 private final BinaryNode NULL_NODE = new BinaryNode();
+
+	public BinarySearchTree() {
+		root = NULL_NODE;
+	}
+
+	public BinaryNode getRoot()
+	{
+		return root;
+	}
+	// For manual tests only
+	void setRoot(BinaryNode n) {
+		this.root = n;
+	}
+	
+	public boolean isEmpty()
+	{
+		return this.root== NULL_NODE;
+	}
+	
+	public int size()
+	{
+		
+		return this.root.size();
+	}
+	
+	public ArrayList<T> toArrayList()
+	{
+		ArrayList<T> list = new ArrayList<T>();
+		this.root.toArrayList(list);
+		return list;
+	}
+	
+	// Not private, since we need access for manual testing.
+	class BinaryNode {
+		private T data;
+		private BinaryNode left;
+		private BinaryNode right;
+		
+		//Just to build the null node
+		public BinaryNode() {
+			this.data = null;
+			this.left = null;
+			this.right = null;
+		}
+
+		public BinaryNode(T element) {
+			this.data = element;
+			this.left = NULL_NODE;
+			this.right = NULL_NODE;
+		}
+
+		public void toArrayList(ArrayList<T> list)
+		{
+			if(this==NULL_NODE)
+			{
+				return;
+			}
+			this.left.toArrayList(list);
+			list.add(this.data);
+			this.right.toArrayList(list);
+			
+		}
+		public T getData() {
+			return this.data;
+		}
+
+		public BinaryNode getLeft() {
+			return this.left;
+		}
+
+
+		public BinaryNode getRight() {
+			return this.right;
+		}
+
+		// For manual testing
+		public void setLeft(BinaryNode left) {
+			this.left = left;
+		}
+		
+		public void setRight(BinaryNode right) {
+			this.right = right;
+		}
+		
+		public int size()
+		{
+		
+			if(this == NULL_NODE)
+			{
+				return 0;
+			}
+			
+			
+			return 1 + this.left.size() + this.right.size();
+		}
+
+		public boolean containsNonBST(T i) {
+			// TODO Auto-generated method stub
+			if(this == NULL_NODE)
+			{
+				return false;
+			}
+//			if(this.data.equals(i))
+//			{
+//				return true;
+//			}
+			return this.data.equals(i) || this.left.containsNonBST(i) || this.right.containsNonBST(i);
+		}
+
+		//et rid of casrs
+		public int height() {
+			// TODO Auto-generated method stub
+			
+			
+			
+			if(this==NULL_NODE)
+			{
+				return -1; // other wise you're counting too much if you have this set as 0
+			}
+			
+			int leftHeight = this.left.height();
+			int rightHeight = this.right.height();
+			
+			if(leftHeight>rightHeight)
+			{
+				return leftHeight + 1;
+			}
+			return rightHeight + 1;
+//			if(this==NULL_NODE)
+//			{
+//				return 0;
+//			}
+//			int leftHeight = 0;
+//			if(this.left!=NULL_NODE)
+//			{
+//				leftHeight += 1;
+//			}
+//			int rightHeight = 0;
+//			if(this.right!=NULL_NODE)
+//			{
+//				rightHeight += 1;
+//			}
+//			if(leftHeight>rightHeight)
+//			{
+//				return 	leftHeight + this.left.height();
+//			}
+//			else if(rightHeight > leftHeight)
+//			{
+//				return rightHeight + this.right.height();
+//			}
+//			return 0;
+			
+			
+//			if(this==NULL_NODE)
+//			{
+//				return 0;
+//			}
+//			
+//			int leftHeight = 0;
+//			int rightHeight = 0;
+//			if(this.left!=NULL_NODE)
+//			{
+//				 leftHeight = (int)this.left.height();
+//				
+//			}
+//			if(this.right!=NULL_NODE)
+//			{
+//				rightHeight=(int) this.right.height();
+//			}
+//			
+//			
+//			
+//			if(leftHeight>rightHeight)
+//			{
+//				return 1 + (int)this.left.height();
+//			}
+//			else if(rightHeight>leftHeight)
+//			{
+//				return 1 + (int)this.right.height();
+//
+//			}
+//			return (int)this.right.height();
+			
+		}
+
+		public BinaryNode insert(T i,InsertTracker tracker) {
+			// TODO Auto-generated method stub
+			if(this==NULL_NODE)
+			{
+				this.data = i;
+				
+				tracker.inserted = true;
+			}
+			if(i.compareTo(this.data)>0)
+			{
+				this.right = this.right.insert(i,tracker);
+				
+			}
+			else if(i.compareTo(this.data)<0)
+			{
+				this.left = this.left.insert(i,tracker);
+			}
+			return this;
+		}
+
+		public BinarySearchTree<T>.BinaryNode remove(T i, BinarySearchTree<T>.InsertTracker tracker) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public boolean contains(T i) {
+			// TODO Auto-generated method stub
+			if(this==NULL_NODE)
+			{
+				return false;
+			}
+			if(i.compareTo(this.data)>0)
+			{
+				return this.right.contains(i);
+			}
+			if(i.compareTo(this.data)<0)
+			{
+				return this.left.contains(i);
+			}
+			
+			return true;
+		}
+		
+	}
+
+	public boolean containsNonBST(T i) {
+		// TODO Auto-generated method stub
+		return this.root.containsNonBST(i);
+	}
+
+	
+
+	// TODO: Implement your 3 iterator classes here, plus any other inner helper classes you'd like. 
+	public Iterator<T> inefficientIterator() {
+		// TODO Auto-generated method stub
+		return new InefficientIterator();
+	}
+	
+	public class InefficientIterator implements Iterator<T>
+	{
+		
+		private ArrayList<T> list;
+		private int index = -1;
+		public InefficientIterator()
+		{
+			list = toArrayList();// TODO
+		}
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return index + 1< list.size();
+		}
+
+		@Override
+		public T next() {
+			// TODO Auto-generated method stub
+			if(!hasNext())
+			{
+				throw new NoSuchElementException();
+			}
+			index++;
+			return list.get(index);
+		}
+		
+		
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		// TODO Auto-generated method stub
+		return new InorderIterator();
+	}
+
+	public class InorderIterator implements Iterator
+	{
+		Stack<BinaryNode> nodeStack = new Stack<BinaryNode>();
+
+		public InorderIterator()
+		{
+			
+			if(root!=NULL_NODE)
+			{
+				addLeftToStack(root);
+			}
+		}
+		
+		public void addLeftToStack(BinaryNode root)
+		{
+			BinaryNode current = root;
+			while(current!=NULL_NODE)
+			{
+				nodeStack.add(current);
+				current = current.left;
+				
+			}
+			
+		}
+		
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			
+			return !nodeStack.isEmpty();
+		}
+
+		@Override
+		public Object next() {
+			// TODO Auto-generated method stub
+			if(!hasNext()) 
+			{
+				throw new NoSuchElementException();
+			}
+			
+			BinaryNode current = nodeStack.pop();
+			if(current.right!=NULL_NODE)
+			{
+				addLeftToStack(current.right);
+			}
+			
+			return current.data;
+//			BinaryNode current = nodeStack.pop();
+//			if(current.right!=NULL_NODE)
+//			{
+//				nodeStack.push(current.right);
+//				
+//			}
+//			if(current.left!=NULL_NODE)
+//			{
+//				nodeStack.push(current.left);
+//			}
+//			
+//			return current.data;
+		}
+		
+	}
+	public Object[] toArray() {
+		// TODO Auto-generated method stub
+		return this.toArrayList().toArray();
+	}
+	
+	public String toString()
+	{
+		if(this.isEmpty())
+		{
+			return "[]";
+		}
+		String array = "[";
+		Object[] tempArray = this.toArray();
+		for(Object i: tempArray)
+		{
+			array = array + i + ", ";
+		}
+		return array.substring(0,array.length()-2) + "]";
+	}
+
+	public int height() {
+		// TODO Auto-generated method stub
+		if(this.root==NULL_NODE)
+		{
+			return -1;
+		}
+		return this.root.height();
+	}
+	
+	public class PreOrderIterator implements Iterator<T>
+	{
+		Stack<BinaryNode> nodeStack = new Stack<BinaryNode>();
+
+		
+		public PreOrderIterator()
+		{
+			if(root!=NULL_NODE)
+			{
+				nodeStack.push(root);
+			}
+			
+		}
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return !nodeStack.isEmpty();
+		}
+
+		@Override
+		public T next() {
+			// TODO Auto-generated method stub
+			if(!hasNext())
+			{
+				throw new NoSuchElementException();
+			}
+			BinaryNode current = nodeStack.pop();
+			if(current.right!=NULL_NODE)
+			{
+				nodeStack.push(current.right);
+			}
+			if(current.left!=NULL_NODE)
+			{
+				nodeStack.push(current.left);
+				
+			}
+			return current.data;
+		}
+		
+	}
+
+	public Iterator preOrderIterator() {
+		// TODO Auto-generated method stub
+		return new PreOrderIterator();
+	}
+
+	public class InsertTracker
+	{
+		public boolean inserted;
+		public InsertTracker()
+		{
+			inserted = false;
+		}
+	}
+	public boolean insert(T i) {
+		// TODO Auto-generated method stub
+		if(i==null)
+		{
+			throw new IllegalArgumentException();
+		}
+		InsertTracker tracker = new InsertTracker();
+		this.root = this.root.insert(i,tracker);
+		return tracker.inserted;
+	}
+
+	public boolean remove(T i) {
+		// TODO Auto-generated method stub
+		if(i.equals(null))
+		{
+			throw new NullPointerException();
+		}
+		InsertTracker tracker = new InsertTracker();
+		this.root = this.root.remove(i, tracker);
+		return tracker.inserted;
+	}
+
+	public boolean contains(T i) {
+		// TODO Auto-generated method stub
+		return this.root.contains(i);
+	}
+
+}

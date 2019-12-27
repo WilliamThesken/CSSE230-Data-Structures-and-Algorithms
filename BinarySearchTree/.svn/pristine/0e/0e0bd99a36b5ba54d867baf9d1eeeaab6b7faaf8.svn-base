@@ -1,0 +1,106 @@
+/**
+ * 
+ * Implementation of most of the Set interface operations using a Binary Search Tree
+ *
+ * @author Matt Boutell and <<< William Thesken >>>.
+ * @param <T>
+ */
+
+public class BinarySearchTree<T> {
+	private BinaryNode root;
+
+	// Most of you will prefer to use NULL NODES once you see how to use them.
+	// private final BinaryNode NULL_NODE = new BinaryNode();
+
+	public BinarySearchTree() {
+		root = null; // NULL_NODE;
+	}
+
+	// For manual tests only
+	void setRoot(BinaryNode n) {
+		this.root = n;
+	}
+	
+	public boolean isEmpty()
+	{
+		return this.root==null;
+	}
+	
+	public int size()
+	{
+		if(this.isEmpty())
+		{
+			return 0;
+		}
+		
+		return this.root.size();
+	}
+	
+	// Not private, since we need access for manual testing.
+	class BinaryNode {
+		private T data;
+		private BinaryNode left;
+		private BinaryNode right;
+
+		public BinaryNode() {
+			this.data = null;
+			this.left = null;
+			this.right = null;
+		}
+
+		public BinaryNode(T element) {
+			this.data = element;
+			this.left = null;//NULL_NODE;
+			this.right = null;//NULL_NODE;
+		}
+
+		public T getData() {
+			return this.data;
+		}
+
+		public BinaryNode getLeft() {
+			return this.left;
+		}
+
+
+		public BinaryNode getRight() {
+			return this.right;
+		}
+
+		// For manual testing
+		public void setLeft(BinaryNode left) {
+			this.left = left;
+		}
+		
+		public void setRight(BinaryNode right) {
+			this.right = right;
+		}
+		
+		public int size()
+		{
+			int leftSize = 0;
+			int rightSize = 0;
+			
+			if(this.left==null&&this.right==null)
+			{
+				return 1;
+			}
+			
+			if(this.left!=null)
+			{
+				leftSize = this.left.size();
+			}
+			if(this.right!=null)
+			{
+				rightSize = this.right.size();
+			}
+			
+			return 1 + leftSize + rightSize;
+		}
+		
+	}
+
+	// TODO: Implement your 3 iterator classes here, plus any other inner helper classes you'd like. 
+	 
+
+}

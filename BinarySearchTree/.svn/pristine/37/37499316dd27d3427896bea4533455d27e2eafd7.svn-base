@@ -1,0 +1,179 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+/**
+ * 
+ * Implementation of most of the Set interface operations using a Binary Search Tree
+ *
+ * @author Matt Boutell and <<< William Thesken >>>.
+ * @param <T>
+ */
+
+public class BinarySearchTree<T> implements Iterable<T>{
+	private BinaryNode root;
+
+	// Most of you will prefer to use NULL NODES once you see how to use them.
+	 private final BinaryNode NULL_NODE = new BinaryNode();
+
+	public BinarySearchTree() {
+		root = NULL_NODE;
+	}
+
+	// For manual tests only
+	void setRoot(BinaryNode n) {
+		this.root = n;
+	}
+	
+	public boolean isEmpty()
+	{
+		return this.root== NULL_NODE;
+	}
+	
+	public int size()
+	{
+		
+		return this.root.size();
+	}
+	
+	public ArrayList<T> toArrayList()
+	{
+		ArrayList<T> list = new ArrayList<T>();
+		this.root.toArrayList(list);
+		return list;
+	}
+	
+	// Not private, since we need access for manual testing.
+	class BinaryNode {
+		private T data;
+		private BinaryNode left;
+		private BinaryNode right;
+		
+		//Just to build the null node
+		public BinaryNode() {
+			this.data = null;
+			this.left = null;
+			this.right = null;
+		}
+
+		public BinaryNode(T element) {
+			this.data = element;
+			this.left = NULL_NODE;
+			this.right = NULL_NODE;
+		}
+
+		public void toArrayList(ArrayList<T> list)
+		{
+			if(this==NULL_NODE)
+			{
+				return;
+			}
+			this.left.toArrayList(list);
+			list.add(this.data);
+			this.right.toArrayList(list);
+			
+		}
+		public T getData() {
+			return this.data;
+		}
+
+		public BinaryNode getLeft() {
+			return this.left;
+		}
+
+
+		public BinaryNode getRight() {
+			return this.right;
+		}
+
+		// For manual testing
+		public void setLeft(BinaryNode left) {
+			this.left = left;
+		}
+		
+		public void setRight(BinaryNode right) {
+			this.right = right;
+		}
+		
+		public int size()
+		{
+		
+			if(this == NULL_NODE)
+			{
+				return 0;
+			}
+			
+			
+			return 1 + this.left.size() + this.right.size();
+		}
+
+		public boolean containsNonBST(T i) {
+			// TODO Auto-generated method stub
+			if(this == NULL_NODE)
+			{
+				return false;
+			}
+//			if(this.data.equals(i))
+//			{
+//				return true;
+//			}
+			return this.data.equals(i) || this.left.containsNonBST(i) || this.right.containsNonBST(i);
+		}
+		
+	}
+
+	public boolean containsNonBST(T i) {
+		// TODO Auto-generated method stub
+		return this.root.containsNonBST(i);
+	}
+
+	
+
+	// TODO: Implement your 3 iterator classes here, plus any other inner helper classes you'd like. 
+	public Iterator<T> inefficientIterator() {
+		// TODO Auto-generated method stub
+		return new InefficientIterator();
+	}
+	
+	public class InefficientIterator implements Iterator<T>
+	{
+		
+		private ArrayList<T> list;
+		private int index = -1;
+		public InefficientIterator()
+		{
+			list = toArrayList();// TODO
+		}
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return index + 1< list.size();
+		}
+
+		@Override
+		public T next() {
+			// TODO Auto-generated method stub
+			if(!hasNext())
+			{
+				throw new NoSuchElementException();
+			}
+			index++;
+			return list.get(index);
+		}
+		
+		
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object[] toArray() {
+		// TODO Auto-generated method stub
+		return this.toArrayList().toArray();
+	}
+
+}
