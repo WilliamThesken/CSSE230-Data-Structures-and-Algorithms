@@ -1,0 +1,197 @@
+package bst;
+
+
+/**
+ *
+ * Exam 2. Tree methods.
+ * 
+ * @author
+ */
+
+/*
+ * TODO: Directions: Implement the method below. See the paper for details.
+ */
+public class BinarySearchTree {
+
+	BinaryNode root;
+
+	// The -17 is arbitrary -any int would be fine since we never refer to it.
+	final BinaryNode NULL_NODE = new BinaryNode(-17); 
+
+	public BinarySearchTree() {
+		root = NULL_NODE;
+	}
+	public class LeftReplaceBool
+	{
+		public boolean replaced;
+		public LeftReplaceBool()
+		{
+			replaced = false;
+		}
+		
+	}
+	
+	public class MaxDiffWrap
+	{
+		public int maxDifference;
+		public MaxDiffWrap()
+		{
+			maxDifference = 0;
+		}
+	}
+
+	public int maxSiblingDiff() {
+		// TODO Write this
+		
+		MaxDiffWrap wrapper = new MaxDiffWrap();
+		this.root.maxSiblingDiff(wrapper);
+		return wrapper.maxDifference;
+	}
+
+	public boolean leftSubtreeReplace(int value) {
+		// TODO Write this
+		LeftReplaceBool boolWrapper = new LeftReplaceBool();
+		this.root = this.root.leftSubtreeReplace(value, boolWrapper);
+		return boolWrapper.replaced;
+	}
+
+	public boolean hasNodeInRange(int lower, int upper) {
+		// TODO: Write this
+		return this.root.hasNodeInRange(lower, upper);
+	}
+	
+	// The next methods are used by the unit tests
+	public void insert(Integer e) {
+		root = root.insert(e);
+	}
+
+	/**
+	 * Feel free to call from tests to use to verify the shapes of your trees
+	 * while debugging. Just remove the calls you are done so the output isn't
+	 * cluttered.
+	 * 
+	 * @return A string showing a traversal of the nodes where children are
+	 *         indented so that the structure of the tree can be determined.
+	 * 
+	 */
+	public String toIndentString() {
+		return root.toIndentString("");
+	}
+
+	@Override
+	public String toString() {
+		return root.toString();
+	}
+
+	// /////////////// BinaryNode
+	public class BinaryNode {
+		public int data;
+		public BinaryNode left;
+		public BinaryNode right;
+
+		// TODO: Add recursive methods here.
+		
+		
+		// The rest of the methods are used by the unit tests and for debugging
+		public BinaryNode(int element) {
+			this.data = element;
+			this.left = NULL_NODE;
+			this.right = NULL_NODE;
+		}
+		
+		public boolean hasNodeInRange(int lower, int upper) {
+			// TODO Auto-generated method stub
+			if(this == NULL_NODE)
+			{
+				return false;
+			}
+			if(this.data >= lower && this.data <= upper)
+			{
+				return true;
+			}
+			if(lower > this.data)
+			{
+				return this.right.hasNodeInRange(lower, upper);
+			}
+			return this.left.hasNodeInRange(lower, upper);
+		}
+
+		public BinaryNode leftSubtreeReplace(int value, LeftReplaceBool boolWrapper) {
+			// TODO Auto-generated method stub
+			if(this==NULL_NODE)
+			{
+				return this;
+			}
+			if(this.data==value)
+			{
+				boolWrapper.replaced = true;
+				return this.left;
+			}
+			if(value > this.data)
+			{
+				this.right = this.right.leftSubtreeReplace(value, boolWrapper);
+			}
+			else
+			{
+				this.left = this.left.leftSubtreeReplace(value, boolWrapper);
+			}
+			return this;
+		}
+
+		public boolean isFullNode()
+		{
+			if(this.left!=NULL_NODE&&this.right!=NULL_NODE)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public void maxSiblingDiff(MaxDiffWrap wrapper) {
+			// TODO Auto-generated method stub
+			if(this==NULL_NODE)
+			{
+				return;
+			}
+			if(this.isFullNode())
+			{
+				int currentDifference = this.right.data - this.left.data;
+				if(currentDifference>wrapper.maxDifference)
+				{
+					wrapper.maxDifference = currentDifference;
+				}
+			}
+			this.left.maxSiblingDiff(wrapper);
+			this.right.maxSiblingDiff(wrapper);
+		}
+
+		public BinaryNode insert(int e) {
+			if (this == NULL_NODE) {
+				return new BinaryNode(e);
+			} else if (e < data) {
+				left = left.insert(e);
+			} else if (e > data) {
+				right = right.insert(e);
+			} else {
+				// do nothing
+			}
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			if (this == NULL_NODE) {
+				return "";
+			}
+			return left.toString() + this.data + right.toString();
+		}
+
+		public String toIndentString(String indent) {
+			if (this == NULL_NODE) {
+				return indent + "NULL\n";
+			}
+			String myInfo = indent + String.format("%c\n", this.data);
+			return myInfo + this.left.toIndentString(indent + "  ") + this.right.toIndentString(indent + "  ");
+		}
+	}
+}
