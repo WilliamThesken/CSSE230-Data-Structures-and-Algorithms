@@ -1,0 +1,68 @@
+Richard Wayne Bogosian
+Chris McPhail
+
+
+Here's my explanation for how I found this challenge pair...
+I created a Test in GraphSurfingMilestone2Test called testWikiSurfingFindChallengePairAuto
+This test had a while loop that would only break if in got a path that had a length that was above 20
+
+	@Test
+	public void testWikiSurfingFindChallengePairAuto() {
+		assertTrue(runLivingPeopleGraphTests);
+		
+		String from = "";
+		String to = "";
+		String pairFileName = "challenge-pair.txt";
+		
+		int len = 0;
+		List<String> sol = new ArrayList<String>();
+		
+		Set<String> keySet = livingPeopleALGraph.keySet();
+		
+		ArrayList<String> stringArr =  new ArrayList<String>();
+		
+		for(String name: keySet)
+		{
+			stringArr.add(name);
+		}
+		
+		boolean run = true;
+		while(run)
+		{
+
+			from = stringArr.get((int)(Math.random()*(stringArr.size()-1))+0);
+			to = stringArr.get((int)(Math.random()*(stringArr.size()-1))+0);
+			
+			System.out.println("Testing From: " + from);
+			System.out.println("Testing To: " + to);
+			
+			
+			sol = livingPeopleALGraph.shortestPath(from,to);
+			System.out.println("Sol: " + sol);
+			if(sol!=null)
+			{
+				len = sol.size();
+			}
+			
+			
+			if(len>36)
+			{
+				run = false;
+			}
+			System.out.println("Length attempt " + len);
+			
+			sol = new ArrayList<String>();
+			len = 0;
+			
+	
+			
+		}
+		
+		System.out.println("From Success: " + from);
+		System.out.println("To Success: " + to);
+		System.out.println(sol);
+		System.out.println(len);
+		
+		
+		
+	}
